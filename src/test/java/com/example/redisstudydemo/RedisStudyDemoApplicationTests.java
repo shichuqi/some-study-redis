@@ -2,18 +2,15 @@ package com.example.redisstudydemo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.redisson.api.*;
+import org.redisson.api.RLock;
+import org.redisson.api.RMap;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static io.micrometer.core.instrument.Timer.start;
-import static jodd.util.ThreadUtil.sleep;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -45,7 +42,7 @@ public class RedisStudyDemoApplicationTests {
         RLock lock = map.getFairLock("test-lock");
 //        lock.lock(3, TimeUnit.SECONDS);
         try {
-            if(!lock.tryLock(4,3, TimeUnit.SECONDS)){
+            if(!lock.tryLock(4000,1000, TimeUnit.MILLISECONDS)){
                 Thread.currentThread().interrupt();
                 Thread.currentThread().sleep(1000);
             }
@@ -65,7 +62,7 @@ public class RedisStudyDemoApplicationTests {
                 atomicInteger.addAndGet(1);
                 throw new RuntimeException("宕机");
             }*/
-//            lock.unlock();
+            lock.unlock();
             atomicInteger.addAndGet(1);
         }
     }

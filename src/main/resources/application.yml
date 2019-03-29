@@ -1,9 +1,2 @@
 server:
   port: 8080
-
-spring:
-  redis:
-    host: localhost
-    password: lidig
-    database: 0
-    port: 6379
